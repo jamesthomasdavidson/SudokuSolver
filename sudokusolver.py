@@ -8,6 +8,8 @@ import sys
 def base_nine(i, j, d):
 	return 81 * (i - 1) + 9 * (j - 1) + (d - 1) + 1
 
+
+
 def clauses():
 	clauselist = []
 
@@ -40,6 +42,8 @@ def clauses():
 
 def encodePuzzle(grid):
 	cnf = clauses()
+
+	# add already filled in squares
 	for i in range(1,10):
 		for j in range(1,10):
 			d = grid[i-1][j-1]
@@ -48,14 +52,33 @@ def encodePuzzle(grid):
 	return cnf
 	#solution = pycosat.solve(cnf)
 
-	# def getcellnumber(i,j):
-	# 	for d in range(1,10):
-	# 		if base_nine(i, j, d) in solution:
-	# 			return d
-    #
-	# for i in range(1,10):
-	# 	for j in range(1,10):
-	# 		grid[i-1][j-1] = getcellnumber(i,j)
+	def getcellnumber(i,j):
+		for d in range(1,10):
+			if base_nine(i, j, d) in solution:
+				return d
+
+	for i in range(1,10):
+		for j in range(1,10):
+			grid[i-1][j-1] = getcellnumber(i,j)
+
+def decodePuzzle(encoded_string):
+	encoded_list = encoded_string.split()
+	number_list = []
+	# get rid of SAT specifier at start of file
+	encoded_list.pop(0)
+	result_list = []
+	for var in encoded_list:
+		if int(var)>0:
+			number_list.append(int(var))
+
+	for i in range(1,10):
+		row = []
+		for j in range(1,10):
+			for d in range(1, 10):
+				if base_nine(i, j, d) in number_list:
+					row.append(d)
+		result_list.append(row)
+	printPuzzle(result_list)
 
 def inputToArray(input):
 	puzzle =[]
@@ -72,7 +95,7 @@ def inputToArray(input):
 def printPuzzle(puzzle):
 	for eachrow in puzzle:
 		for eachint in eachrow:
-			print(str(eachint) + " ")
+			print(str(eachint) + " "),
 		print("")
 
 def writeEncodingToFile(cnf_list, output_file_name):
@@ -89,7 +112,7 @@ def writeEncodingToFile(cnf_list, output_file_name):
 
 def main():
 	if len(sys.argv) != 3:
-		print "Improper number of cmd arguments. See README."
+		print "Improper number of cmd arguments. See README.md for instructions."
 		sys.exit()
 	if sys.argv[1] == 'encode':
 		input_file = open(sys.argv[2], "r")
@@ -102,11 +125,14 @@ def main():
 		puzzle = inputToArray(input_string_formatted)
 		cnf_list = encodePuzzle(puzzle)
 		#print cnf_list
-		output_file_name = sys.argv[2] + "CNF"
+		output_file_name = "tests/encoded/" + sys.argv[2].split("/").pop()
 		writeEncodingToFile(cnf_list, output_file_name)
 
 	elif sys.argv[1] == 'decode':
-		print 'decoding'
+		input_file = open(sys.argv[2], "r")
+		input_string = input_file.read()
+		decodePuzzle(input_string)
+
 	else:
 		print ("improper command line argument " + sys.argv[1])
 
