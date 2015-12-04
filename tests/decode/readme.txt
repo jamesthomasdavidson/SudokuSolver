@@ -1,0 +1,1 @@
+Output of Minisat, which are to be decoded by sokukosolver.py.

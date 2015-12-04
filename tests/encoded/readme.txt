@@ -1,0 +1,1 @@
+Output of sodukosolver.py, which encodes sodoku puzzles to DIMACS format.
