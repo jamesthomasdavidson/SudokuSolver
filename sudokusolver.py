@@ -111,7 +111,7 @@ def writeEncodingToFile(cnf_list, output_file_name):
 
 
 def main():
-	if len(sys.argv) != 3:
+	if len(sys.argv) != 4:
 		print "Improper number of cmd arguments. See README.md for instructions."
 		sys.exit()
 	if sys.argv[1] == 'encode':
@@ -125,7 +125,7 @@ def main():
 		puzzle = inputToArray(input_string_formatted)
 		cnf_list = encodePuzzle(puzzle)
 		#print cnf_list
-		output_file_name = "tests/encoded/" + sys.argv[2].split("/").pop()
+		output_file_name = sys.argv[3]
 		writeEncodingToFile(cnf_list, output_file_name)
 
 	elif sys.argv[1] == 'decode':
