@@ -12,14 +12,13 @@ def base_nine(i, j, d):
 
 def clauses():
 	clauselist = []
-
 	for i in range(1, 10):
 		for j in range(1, 10):
-			""" 1 | Assign a number to every square """
+			"""Assign every square a number 1-9 """
 			clauselist.append([base_nine(i, j, d) for d in range(1, 10)])
 			for d in range(1,10):
 				for l in range(d+1, 10):
-					""" 36 | but make sure that no square has the same number """
+					"""Make sure no square holds more than one number"""
 					clauselist.append([-base_nine(i, j, d), -base_nine(i, j, l)])
 
 	def valid(cells):
@@ -27,13 +26,15 @@ def clauses():
 			for j, ej in enumerate(cells):
 				if i<j:
 					for d in range(1,10):
-						""" # | make sure that the same number doesn't exist more than once in the """
+						"""Make sure the number doesnt exist more than once in every row, column and grid"""
 						clauselist.append([-base_nine(ei[0], ei[1], d), -base_nine(ej[0], ej[1], d)])
-
+						
+	"""Column and row clauses assigned here"""
 	for i in range(1,10):
 		valid([(i,j) for j in range(1,10)])
 		valid([(j,i) for j in range(1,10)])
-
+		
+	"""Grid rules assigned here"""
 	for i in 1, 4, 7:
 		for j in 1, 4 ,7:
 			valid([(i + k % 3, j + k // 3) for k in range(9)])
@@ -50,16 +51,6 @@ def encodePuzzle(grid):
 			if d:
 				cnf.append([base_nine(i, j, d)])
 	return cnf
-	#solution = pycosat.solve(cnf)
-
-	def getcellnumber(i,j):
-		for d in range(1,10):
-			if base_nine(i, j, d) in solution:
-				return d
-
-	for i in range(1,10):
-		for j in range(1,10):
-			grid[i-1][j-1] = getcellnumber(i,j)
 
 def decodePuzzle(encoded_string):
 	encoded_list = encoded_string.split()
