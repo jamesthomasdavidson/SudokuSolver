@@ -136,9 +136,5 @@ def main():
 	else:
 		print ("improper command line argument " + sys.argv[1])
 
-	#printPuzzle(puzzle)
-
-
-
 if __name__ == "__main__":
 	main()
