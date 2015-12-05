@@ -48,5 +48,5 @@ To decode the results of the MiniSAT solver, type the following in the command l
   python sudokusolver.py decode <filename>
 
 To solve the puzzles in the tests/unencoded folder:
-  Enter the command "chmod u+x solve.sh" to enable script execution
+  Enter the command "chmod u+x run_solver.sh" to enable script execution
   Run ./run_solver
